@@ -853,8 +853,10 @@ function torrentMetadata (torrentKey, torrentInfo) {
   torrentSummary.status = 'downloading'
   torrentSummary.name = torrentSummary.displayName || torrentInfo.name
   torrentSummary.path = torrentInfo.path
-  torrentSummary.files = torrentInfo.files
   torrentSummary.magnetURI = torrentInfo.magnetURI
+  if (!torrentSummary.files) {
+    torrentSummary.files = torrentInfo.files
+  }
   if (!torrentSummary.selections) {
     torrentSummary.selections = torrentSummary.files.map((x) => true)
   }
