@@ -60,8 +60,10 @@ function renderMedia (state) {
       tracks[j].mode = (j === state.playing.subtitles.selectedIndex) ? 'showing' : 'hidden'
     }
 
-    state.playing.currentTime = mediaElement.currentTime
-    state.playing.duration = mediaElement.duration
+    // Save video position
+    var file = state.getPlayingFileSummary()
+    file.currentTime = state.playing.currentTime = mediaElement.currentTime
+    file.duration = state.playing.duration = mediaElement.duration
     state.playing.volume = mediaElement.volume
   }
 
@@ -161,8 +163,7 @@ function renderOverlay (state) {
 }
 
 function renderAudioMetadata (state) {
-  var torrentSummary = state.getPlayingTorrentSummary()
-  var fileSummary = torrentSummary.files[state.playing.fileIndex]
+  var fileSummary = state.getPlayingFileSummary()
   if (!fileSummary.audioInfo) return
   var info = fileSummary.audioInfo
 
