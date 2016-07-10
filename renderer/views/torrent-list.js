@@ -221,8 +221,8 @@ function TorrentList (state) {
     // Are we even torrenting it?
     var isSelected = torrentSummary.selections && torrentSummary.selections[index]
     var isDone = false // Are we finished torrenting it?
-    var progress = ''
-    if (torrentSummary.progress && torrentSummary.progress.files) {
+    var progress
+    if (isSelected && torrentSummary.progress && torrentSummary.progress.files) {
       var fileProg = torrentSummary.progress.files[index]
       isDone = fileProg.numPiecesPresent === fileProg.numPieces
       progress = Math.round(100 * fileProg.numPiecesPresent / fileProg.numPieces) + '%'
@@ -247,7 +247,7 @@ function TorrentList (state) {
       icon = 'description' /* file icon, opens in OS default app */
       handleClick = dispatcher('openItem', infoHash, index)
     }
-    var rowClass = ''
+    var rowClass
     if (!isSelected) rowClass = 'disabled' // File deselected, not being torrented
     if (!isDone && !isPlayable) rowClass = 'disabled' // Can't open yet, can't stream
     return hx`
@@ -260,7 +260,7 @@ function TorrentList (state) {
           ${file.name}
         </td>
         <td class='col-progress ${rowClass}'>
-          ${isSelected ? progress : ''}
+          ${progress}
         </td>
         <td class='col-size ${rowClass}'>
           ${prettyBytes(file.length)}

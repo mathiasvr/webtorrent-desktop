@@ -293,7 +293,6 @@ function renderCastScreen (state) {
   var castStatus
   if (isCast && isStarting) castStatus = 'Connecting to ' + castName + '...'
   else if (isCast && !isStarting) castStatus = 'Connected to ' + castName
-  else castStatus = ''
 
   // Show a nice title image, if possible
   var style = {
@@ -365,11 +364,12 @@ function renderSubtitlesOptions (state) {
 function renderPlayerControls (state) {
   var positionPercent = 100 * state.playing.currentTime / state.playing.duration
   var playbackCursorStyle = { left: 'calc(' + positionPercent + '% - 3px)' }
-  var captionsClass = state.playing.subtitles.tracks.length === 0
-    ? 'disabled'
-    : state.playing.subtitles.selectedIndex >= 0
-      ? 'active'
-      : ''
+  var captionsClass
+  if (state.playing.subtitles.tracks.length === 0) {
+    captionsClass = 'disabled'
+  } else if (state.playing.subtitles.selectedIndex >= 0) {
+    captionsClass = 'active'
+  }
 
   var elements = [
     hx`
@@ -442,7 +442,6 @@ function renderPlayerControls (state) {
       buttonHandler = undefined
     } else {
       // Option 3: we are not connected anywhere. Button opens Chromecast menu.
-      buttonClass = ''
       buttonHandler = dispatcher('toggleCastMenu', castType)
     }
     var buttonIcon = buttonIcons[castType][isCasting]
@@ -603,7 +602,6 @@ function renderLoadingBar (state) {
           left: (100 * part.start / fileProg.numPieces) + '%',
           width: (100 * part.count / fileProg.numPieces) + '%'
         }
-
         return hx`<div class='loading-bar-part' style=${style}></div>`
       })}
     </div>
@@ -614,8 +612,7 @@ function renderLoadingBar (state) {
 function cssBackgroundImagePoster (state) {
   var torrentSummary = state.getPlayingTorrentSummary()
   var posterPath = TorrentSummary.getPosterPath(torrentSummary)
-  if (!posterPath) return ''
-  return cssBackgroundImageDarkGradient() + `, url('${posterPath}')`
+  if (posterPath) return cssBackgroundImageDarkGradient() + `, url('${posterPath}')`
 }
 
 function cssBackgroundImageDarkGradient () {
