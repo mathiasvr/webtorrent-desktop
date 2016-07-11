@@ -95,7 +95,7 @@ function chromecastPlayer () {
   }
 
   function open () {
-    var torrentSummary = state.saved.torrents.find((x) => x.infoHash === state.playing.infoHash)
+    var torrentSummary = state.getPlayingTorrentSummary()
     ret.device.play(state.server.networkURL, {
       type: 'video/mp4',
       title: config.APP_NAME + ' - ' + torrentSummary.name
@@ -274,7 +274,7 @@ function dlnaPlayer (player) {
   }
 
   function open () {
-    var torrentSummary = state.saved.torrents.find((x) => x.infoHash === state.playing.infoHash)
+    var torrentSummary = state.getPlayingTorrentSummary()
     ret.device.play(state.server.networkURL, {
       type: 'video/mp4',
       title: config.APP_NAME + ' - ' + torrentSummary.name,
